@@ -54,7 +54,7 @@ var table = new Table({
                     for (var i = 0; i < response.length; i++) {
                         var id = response[i].item_id;
                         var product = response[i].product_name;
-                        var price = '$' + response[i].price;
+                        var price = response[i].price.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
                         var quantity = response[i].stock_quantity;
                         array.push(id);
                         array.push(product);
@@ -83,7 +83,7 @@ var table = new Table({
                     for (var i = 0; i < response.length; i++) {
                         var id = response[i].item_id;
                         var product = response[i].product_name;
-                        var price = '$' + response[i].price;
+                        var price = response[i].price.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
                         var quantity = response[i].stock_quantity;
                         array.push(id);
                         array.push(product);
@@ -113,12 +113,12 @@ var table = new Table({
                         var id = response[i].item_id;
                         var product = response[i].product_name;
                         var department = response[i].department_name;
-                        var price = response[i].price;
+                        var price = response[i].price.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
                         var quantity = response[i].stock_quantity;
 
                         var row = id + ' | ';
                         row += product + ' | ';
-                        row += department + ' | $';
+                        row += department + ' | ';
                         row += price + ' | ';
                         row += quantity;
                         products.push(row);

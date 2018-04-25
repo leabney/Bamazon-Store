@@ -25,4 +25,25 @@ VALUES ('FAO Schwarz Giraffe Giant Plush Toy','Toys and Games',499.99,5)
 ,('Fisher Price Rock and Play Sleeper','Baby',65.55,2)
 ,('Pampers Cruisers','Health and Household',44.77,2);
 
-SELECT * FROM products
+SELECT * FROM products;
+
+CREATE TABLE departments (
+department_id INT NOT NULL AUTO_INCREMENT,
+department_name VARCHAR(50),
+over_head_costs DECIMAL(18,2),
+primary key (department_id));
+
+INSERT INTO departments (department_name)
+SELECT DISTINCT department_name FROM products;
+
+
+UPDATE departments SET over_head_costs = 10000 WHERE department_id=1;
+UPDATE departments SET over_head_costs = 4000 WHERE department_id=2;
+UPDATE departments SET over_head_costs = 1000 WHERE department_id=3;
+UPDATE departments SET over_head_costs = 5000 WHERE department_id=4;
+UPDATE departments SET over_head_costs = 2000 WHERE department_id=5;
+
+
+ALTER TABLE products 
+ADD COLUMN product_sales DECIMAL(18,2);
+

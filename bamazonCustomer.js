@@ -44,10 +44,10 @@ function setup() {
         for (var i = 0; i < response.length; i++) {
             var id = response[i].item_id;
             var product = response[i].product_name;
-            var price = response[i].price;
+            var price = response[i].price.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
             var row = id + ' | ';
-            row += product + ' | $';
+            row += product + ' | ';
             row += price;
             products.push(row);
         }
@@ -93,7 +93,7 @@ function setup() {
                         //display order details//
                         orderDetails();
                         //update database  -  reduce stock_quantity by quantity purchased
-                        query = connection.query('UPDATE products SET stock_quantity = stock_quantity - ' + quantity + ' WHERE item_id=' + db_itemId, function (error, response) {
+                        var query = connection.query('UPDATE products SET stock_quantity = stock_quantity - ' + quantity + ', product_sales = product_sales + ' + (quantity * db_price) + ' WHERE item_id=' + db_itemId, function (error, response) {
                         })
 
                         reOrder();
@@ -118,7 +118,7 @@ function setup() {
                                     name: 'reduceOrder'
                                 }
                             ]).then(function (inquirerResponse) {
-                                
+
                                 //if they would like to reduce their order to inStock units, reduce quantity & place order//
                                 if (inquirerResponse.reduceOrder === 'Yes') {
                                     ordered = true;
@@ -126,7 +126,7 @@ function setup() {
                                     //display order details//
                                     orderDetails();
                                     //update database  -  reduce stock_quantity by quantity purchased
-                                    query = connection.query('UPDATE products SET stock_quantity = stock_quantity - ' + db_inStock + ' WHERE item_id=' + db_itemId, function (error, response) {
+                                    query = connection.query('UPDATE products SET stock_quantity = stock_quantity - ' + db_inStock + ', product_sales = product_sales + ' + (db_inStock * db_price) + ' WHERE item_id=' + db_itemId, function (error, response) {
 
                                         reOrder();
                                     })
@@ -143,13 +143,13 @@ function setup() {
 };
 
 //display order details//
-function orderDetails(){
-console.log(chalk.bgCyan('\n*    Thank you for your purchase!    *\n'));
-console.log(chalk.cyan('***   Order Details:   ***'));
-console.log(chalk.cyan('Product: ' + db_product));
-console.log(chalk.cyan('Units: ' + quantity));
-console.log(chalk.cyan('Price Per Unit: ' + db_price));
-console.log(chalk.cyan('Total Price: ' + db_price * quantity + '\n'));
+function orderDetails() {
+    console.log(chalk.bgCyan('\n*    Thank you for your purchase!    *\n'));
+    console.log(chalk.cyan('***   Order Details:   ***'));
+    console.log(chalk.cyan('Product: ' + db_product));
+    console.log(chalk.cyan('Units: ' + quantity));
+    console.log(chalk.cyan('Price Per Unit: ' + db_price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })));
+    console.log(chalk.cyan('Total Price: ' + (db_price * quantity).toLocaleString('en-US', { style: 'currency', currency: 'USD' }) + '\n'));
 }
 
 //prompt user for another order//
